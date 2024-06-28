@@ -5,7 +5,7 @@ PREGNANCY_DURATION = datetime.timedelta(weeks=40)
 IVF_DURATION = datetime.timedelta(weeks=38)
 TODAY = datetime.datetime.today().date()
 
-week_names = {
+WEEK_NAMES = {
     0: 'недель',
     1: 'неделя',
     2: 'недели',
@@ -17,7 +17,7 @@ week_names = {
     8: 'недель',
     9: 'недель',
 }
-day_names = {
+DAY_NAMES = {
     1: 'день',
     2: 'дня',
     3: 'дня',
@@ -31,12 +31,12 @@ def get_mode():
     print('[1] По дате последней менструации')
     print('[2] По дате первого УЗИ')
     print('[3] По дате ЭКО')
-    mode = input('[1] / [2] / [3]: ')
-    if mode not in ('1', '2', '3'):
+    choice = input('[1] / [2] / [3]: ')
+    if choice not in ('1', '2', '3'):
         print('Доступны режимы [1] [2] [3]')
         return get_mode()
     else:
-        return int(mode)
+        return int(choice)
 
 
 def get_menstruation_date():
@@ -50,9 +50,9 @@ def get_menstruation_date():
 
 
 def get_MUS_date():
-    first_MUS_input = input('Дата УЗИ (ДД.ММ.ГГГГ): ')
+    first_mus_input = input('Дата УЗИ (ДД.ММ.ГГГГ): ')
     try:
-        first_MUS = datetime.datetime.strptime(first_MUS_input, FORMAT).date()
+        first_MUS = datetime.datetime.strptime(first_mus_input, FORMAT).date()
         return first_MUS
     except Exception:
         print('Неверный формат даты')
@@ -79,10 +79,10 @@ def show_term(term_of_pregnant):
     weeks = term_of_pregnant // 7
     days = term_of_pregnant % 7
     if weeks != 0:
-        week_name = week_names[weeks % 10]
+        week_name = WEEK_NAMES[weeks % 10]
         term += f'{weeks} {week_name}'
     if days != 0:
-        day_name = day_names[days % 10]
+        day_name = DAY_NAMES[days % 10]
         if weeks != 0:
             term += f' и {days} {day_name}'
         else:
@@ -115,10 +115,10 @@ def show_term_MUS(date, term_arr):
     weeks = term_arr[0] + time_passed // 7
     days = term_arr[1] + time_passed % 7
     if weeks != 0:
-        week_name = week_names[weeks % 10]
+        week_name = WEEK_NAMES[weeks % 10]
         term += f'{weeks} {week_name}'
     if days != 0:
-        day_name = day_names[days % 10]
+        day_name = DAY_NAMES[days % 10]
         if weeks != 0:
             term += f' и {days} {day_name}'
         else:
@@ -152,20 +152,20 @@ def calculate_date_IVF(date, days):
 
 
 def run_program():
-    mode = get_mode()
-    if mode == 1:
+    choice = get_mode()
+    if choice == 1:
         last_menstruation_day = get_menstruation_date()
         pregnant_term = calculate_term(last_menstruation_day)
         show_term(pregnant_term)
         birth = calculate_date(last_menstruation_day)
         show_date(birth)
-    elif mode == 2:
+    elif choice == 2:
         MUS_date = get_MUS_date()
         MUS_term = get_MUS_term()
         show_term_MUS(MUS_date, MUS_term)
         birth = calculate_date_MUS(MUS_date, MUS_term[0], MUS_term[1])
         show_date(birth)
-    elif mode == 3:
+    elif choice == 3:
         IVF_date = get_IVF_date()
         days = get_embrion_days()
         term = get_IVF_term(IVF_date, days)
